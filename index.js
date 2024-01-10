@@ -10,6 +10,7 @@ import stripeRouter from './routes/stripe.js'
 import cors from 'cors';
 
 const app = express();
+const PORT = process.env.PORT || 5001
 
 dotenv.config()
 
