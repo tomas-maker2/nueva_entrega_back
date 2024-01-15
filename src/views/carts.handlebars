@@ -1,0 +1,64 @@
+{{!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito</title>
+</head>
+<body>
+    <h1>Listado de carritos</h1>
+    
+    {{#each cart}}
+    <ul>
+        <li>Usuario ID: {{this.userId}}</li>
+        <li>Productos:</li>
+        {{#if this.products.length}}
+            {{#each this.products}}
+                <ul>
+                    <li>Producto ID: {{this.productId}}</li>
+                    <li>Cantidad: {{this.quantity}}</li>
+                </ul>
+            {{/each}}
+        {{else}}
+            <p>No hay productos en el carrito.</p>
+        {{/if}}
+    </ul>
+{{/each}}
+
+
+</body>
+</html> --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito</title>
+</head>
+<body>
+    <h1>Listado de carritos</h1>
+    
+    {{#each cart}}
+    <ul>
+        <li>Usuario ID: {{this.userId}}</li>
+        <li>Productos:</li>
+        {{#if this.products.length}}
+            {{#each this.products}}
+                <ul>
+                    <li>Producto ID: {{this.productId}}</li>
+                    <li>Cantidad: {{this.quantity}}</li>
+                </ul>
+            {{/each}}
+            <form action="/api/carts/process-payment" method="post">
+                <input type="hidden" name="payment_method_id" value="stripe_payment_method_id">
+                <button type="submit">Simular Pago</button>
+            </form>
+        {{else}}
+            <p>No hay productos en el carrito.</p>
+        {{/if}}
+    </ul>
+    {{/each}}
+
+</body>
+</html>

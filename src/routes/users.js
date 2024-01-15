@@ -1,83 +1,34 @@
 import express from 'express';
-import { verifyTokenAndAdmin, verifyTokenAndAuthorization } from './veifyToken.js';
-import { userModel } from '../modules/user.js';
+import { verifyTokenAndAdmin, verifyTokenAndAuthorization } from '../middleware/verifytoken.js';
+import { getUserById, getAllUsers, createNewUser, deleteUser, getUserStats, getUsersView } from '../controller/user.controller.js';
+
 
 const router = express.Router();
 
-router.put('/:id', verifyTokenAndAuthorization, async (req,res) => {
-    if(req.body.password){
-        req.body.password =  CryptoJS.AES.encrypt(req.body.password, process.env.PASS_SEC).toString();
-    }
-    try {
-        const updatedUser = await userModel.findByIdAndUpdate(req.params.id, {
-            $set: req.body
-        }, {new:true})
-        res.status(200).json(updatedUser)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+
+// UPDATE
+router.put('/:id', createNewUser)
+// verifyTokenAndAuthorization
+
 
 // DELETE
-router.delete('/:id', verifyTokenAndAuthorization, async (req,res) => {
-    try {
-        await userModel.findByIdAndDelete(req.params.id)
-        res.status(200).json('Usuario eliminado...')
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
-
+router.delete('/:id', deleteUser)
+// verifyTokenAndAuthorization
 
 // GET
-router.get('/find/:id', verifyTokenAndAdmin, async (req,res) => {
-    try {
-        const user = await userModel.findById(req.params.id);
-        const {password, ...others} = user._doc;
-        res.status(200).json(others)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+router.get('/find/:id', getUserById)
+// verifyTokenAndAdmin
 
 // GET ALL USERS
-router.get('/', verifyTokenAndAdmin, async (req,res) => {
-    const query = req.query.new
-    try {
-        const users = query ? await userModel.find().sort({_id: -1}).limit(5) : await userModel.find();
-        res.status(200).json(users);
-    } catch (err) {
-        res.status(500).json(err)
-    }
-});
+router.get('/', getAllUsers)
+// verifyTokenAndAdmin
 
 // GET USER STATS
-router.get('/stats', verifyTokenAndAdmin, async (req,res) => {
-    const date = new Date();
-    const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+router.get('/stats', getUserStats)
+// verifyTokenAndAdmin
 
-    try {
-        
-        const data = await userModel.aggregate([
-            {$match: {createdAt:{$gte: lastYear} } },
-            {
-                $project: {
-                    month: {$month: "$createdAt"},
-                },
-            },
-            {
-                $group:{
-                    _id: "$month",
-                    total:{$sum: 1}
-                }
-            }
-        ])
-        res.status(200).json(data)
-
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+// VIEWS
+router.get('/views', getUsersView)
 
 
 export default router

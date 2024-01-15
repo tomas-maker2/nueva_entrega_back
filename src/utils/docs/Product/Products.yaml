@@ -1,0 +1,130 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos satisfactoriamente desde la bd
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Alfo fallo en la busqueda en la bd
+  /api/products/find/{uid}:
+    get:
+      summary: Obtener producto segun Id
+      tags:
+        - Products
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id del producto a buscar
+        schema:
+          $type: String
+      responses:
+        "200":
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'
+  /api/products/{uid}:
+    put:
+      summary: Actualiza un producto segun Id
+      tags:
+        - Products
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id del producto a buscar
+        schema:
+          $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id: 
+          type: ObjectId
+          description: Id de mongo
+        title:
+          type: String
+          description: Nombre del articulo
+        description:
+          type: String
+          description: Descripcion del articulo
+        img: 
+          type: String
+          description: Imagen
+        categories:
+          type: Array
+          description: Categoria del producto
+        size:
+          type: String
+          description: Tamaño de la prenda
+        color:
+          type: String
+          description: Color
+        price:
+          type: Number
+          description: Precio
+      example:
+        _id: ObjectId("asd")
+        title: patata
+        description: pattatest
+        img: test
+        categories: comida
+        size: grande
+        color: azul
+        price: 20
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        _id: 
+          type: ObjectId
+          description: Id de mongo
+        title:
+          type: String
+          description: Nombre del articulo
+        description:
+          type: String
+          description: Descripcion del articulo
+        img: 
+          type: String
+          description: Imagen
+        categories:
+          type: Array
+          description: Categoria del producto
+        size:
+          type: String
+          description: Tamaño de la prenda
+        color:
+          type: String
+          description: Color
+        price:
+          type: Number
+          description: Precio
+      example:
+        title: totot
+        description: pattatest
+        img: test
+        categories: comida
+        size: grande
+        color: azul
+        price: 20
+
+

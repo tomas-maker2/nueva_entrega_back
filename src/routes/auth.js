@@ -1,5 +1,5 @@
 import express from 'express';
-import { userModel } from '../modules/user.js';
+import { userModel } from '../dto/modules/user.js';
 import CryptoJS from 'crypto-js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv'
@@ -24,6 +24,7 @@ router.post("/register", async (req,res) => {
         res.status(500).json(err)
     }
 })
+
 
 // LOGIN
 
@@ -56,6 +57,8 @@ router.post('/login', async (req,res) => {
         return res.status(500).json('Error interno del servidor');
     }
 })
+
+
 
 export default router;
 

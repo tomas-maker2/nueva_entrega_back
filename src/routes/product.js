@@ -1,80 +1,29 @@
 import express from 'express';
-import { verifyTokenAndAdmin } from './veifyToken.js';
-import { productModel } from '../modules/product.js';
+import { verifyToken, verifyTokenAndAdmin, verifyTokenAndAuthorization } from '../middleware/verifytoken.js';
+import { createProduct, deleteProduct, findProductById, getAllProducts, productView, updateProduct } from '../controller/product.controller.js';
 
 const router = express.Router();
 
+
 // CREATE
-router.post('/',verifyTokenAndAdmin ,  async (req,res) => {
-    const newProduct = new productModel(req.body)
+router.post('/' , createProduct)
+// verifyTokenAndAdmin
 
-    try {
-        const savedProduct = await newProduct.save();
-        res.status(200).json(savedProduct)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
-
-router.put('/:id', verifyTokenAndAdmin, async (req,res) => {
-    try {
-        const updatedProduct = await productModel.findByIdAndUpdate(
-            req.params.id,
-            {
-                $set: req.body,
-            },
-            {new: true}
-        );
-        res.status(200).json(updatedProduct);
-
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+router.put('/:id', updateProduct)
+// verifyTokenAndAdmin
 
 // DELETE
-router.delete('/:id', verifyTokenAndAdmin, async (req,res) => {
-    try {
-        await productModel.findByIdAndDelete(req.params.id)
-        res.status(200).json('Producto eliminado...')
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+router.delete('/:id', deleteProduct)
+// verifyTokenAndAdmin
 
 // GET PRODUCT
-router.get('/find/:id', async (req,res) => {
-    try {
-        const product = await productModel.findById(req.params.id);
-        res.status(200).json(product)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+router.get('/find/:id', findProductById)
 
 
 // GET ALL PRODUCTS
-router.get('/', async (req,res) => {
-    const qNew = req.query.new
-    const qCategory = req.query.category
-    try {
-        let products;
-        
-        if(qNew){
-            products = await productModel.find().sort({createdAt: -1}).limit(1);
-        } else if(qCategory){
-            products = await productModel.find({categories:{
-                $in: [qCategory]
-            },
-        });
-        } else{
-            products = await productModel.find()
-        }
+router.get('/', getAllProducts);
 
-        res.status(200).json(products);
-    } catch (err) {
-        res.status(500).json(err)
-    }
-});
+// VIEW PRODUCTS
+router.get('/views' ,  productView)
 
 export default router
