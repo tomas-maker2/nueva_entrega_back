@@ -1,18 +1,18 @@
 import express from 'express';
 import { verifyToken, verifyTokenAndAdmin, verifyTokenAndAuthorization } from '../middleware/verifytoken.js';
-import { addToCart, cartView, createCart, deleteCart, getCarts, getUserCart, processPayment, updateCart } from '../controller/cart.controller.js';
+import { cartView, createCart, deleteCart, getCarts, getUserCart, updateCart } from '../controller/cart.controller.js';
 
 
 
 const router = express.Router();
 
 // AGREGAR AL CARRITO
-router.post('/add-to-cart'  , addToCart)
+// router.post('/add-to-cart'  , addToCart)
 // verifyTokenAndAdmin
 
 
 // PROCESA DE PAGO
-router.post('/process-payment', processPayment)
+// router.post('/process-payment', processPayment)
 
 // CREATE
 router.post('/' , createCart)

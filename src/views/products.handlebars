@@ -12,10 +12,7 @@
         <ul>
             <li>Titulo: {{this.title}}</li>
             <li>Precio: {{this.price}}</li>
-            <form action="/api/carts/add-to-cart" method="post">
-                <input type="hidden" name="productId" value="{{this._id}}">
-                <button type="submit">Agregar al Carrito</button>
-            </form>
+            
         </ul>
     {{/each}}
 

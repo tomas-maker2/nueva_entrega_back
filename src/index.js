@@ -8,7 +8,7 @@ import authRouter from '../src/routes/auth.js'
 import productRouter from '../src/routes/product.js'
 import cartRouter from '../src/routes/cart.js';
 import orderRouter from '../src/routes/order.js';
-import stripeRouter from '../src/routes/stripe.js'
+// import stripeRouter from '../src/routes/stripe.js'
 import cors from 'cors';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express'
@@ -67,7 +67,7 @@ app.use('/api/users' , userRouter)
 app.use('/api/products' , productRouter)
 app.use('/api/carts' , cartRouter)
 app.use('/api/orders' , orderRouter)
-app.use('/api/checkout' , stripeRouter)
+// app.use('/api/checkout' , stripeRouter)
 
 app.listen(5000, () => {
     console.log('Servidor Backend Corriendo!')

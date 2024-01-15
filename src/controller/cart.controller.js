@@ -1,75 +1,75 @@
 import mongoose from "mongoose";
 import { cartModel } from "../dto/modules/cart.js";
 import { productModel } from "../dto/modules/product.js";
-import stripe from 'stripe';
+// import stripe from 'stripe';
 
-const stripeSecretKey = 'sk_test_51OX5uqD4sDDnwuv3H7jAPCCNBoEGZMjW86ndTer8u3mssNmr26UV87i1RSC4rSevASUm8TUs6kk6lR1Tvm9NE1et00YlsKA1bG'
+// const stripeSecretKey = 'sk_test_51OX5uqD4sDDnwuv3H7jAPCCNBoEGZMjW86ndTer8u3mssNmr26UV87i1RSC4rSevASUm8TUs6kk6lR1Tvm9NE1et00YlsKA1bG'
 
-const stripeClient = stripe(stripeSecretKey);
+// const stripeClient = stripe(stripeSecretKey);
 
 
-// PASARELA DE PAGO
-export const processPayment = async (req,res) => {
-    try {
-        // Lógica para procesar el pago utilizando la biblioteca de Stripe
-        const paymentIntent = await stripeClient.paymentIntents.create({
-            amount: 1000, // Monto en centavos (ejemplo: $10)
-            currency: 'usd',
-            payment_method: req.body.payment_method_id,
-            confirmation_method: 'manual',
-            confirm: true,
-        });
+// // PASARELA DE PAGO
+// export const processPayment = async (req,res) => {
+//     try {
+//         // Lógica para procesar el pago utilizando la biblioteca de Stripe
+//         const paymentIntent = await stripeClient.paymentIntents.create({
+//             amount: 1000, // Monto en centavos (ejemplo: $10)
+//             currency: 'usd',
+//             payment_method: req.body.payment_method_id,
+//             confirmation_method: 'manual',
+//             confirm: true,
+//         });
 
-        // Puedes almacenar información adicional sobre la transacción en tu base de datos.
+//         // Puedes almacenar información adicional sobre la transacción en tu base de datos.
 
-        res.status(200).json({ client_secret: paymentIntent.client_secret });
-    } catch (err) {
-        res.status(500).json(err);
-    }
-}
+//         res.status(200).json({ client_secret: paymentIntent.client_secret });
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+// }
 
 // AGREGAR PRODUCTO AL CARRITO
-export const addToCart = async (req, res) => {
-    try {
-        console.log(req.body);
-        const { productId } = req.body;
+// export const addToCart = async (req, res) => {
+//     try {
+//         console.log(req.body);
+//         const { productId } = req.body;
 
-        // Obtener info del producto desde la bd
-        const product = await productModel.findById(new  mongoose.Types.ObjectId(productId));
+//         // Obtener info del producto desde la bd
+//         const product = await productModel.findById(new  mongoose.Types.ObjectId(productId));
 
-        if (!product) {
-            return res.status(404).json({ message: 'Producto no Encontrado' });
-        }
+//         if (!product) {
+//             return res.status(404).json({ message: 'Producto no Encontrado' });
+//         }
 
-        // Verificar si el usuario ya tiene carrito
-        let userCart = await cartModel.findOne({ userId: req.user._id });
+//         // Verificar si el usuario ya tiene carrito
+//         let userCart = await cartModel.findOne({ userId: req.user._id });
 
-        if (!userCart) {
-            userCart = new cartModel({
-                userId: req.user._id,
-                products: [{ productId, quantity: 1 }]
-            });
-        } else {
-            // SI EXISTE EL CARRITO , VERIFICAR SI EL PRODUCTO YA ESTA EN EL CARRITO
-            const existingProduct = userCart.products.find(p => p.productId === productId);
+//         if (!userCart) {
+//             userCart = new cartModel({
+//                 userId: req.user._id,
+//                 products: [{ productId, quantity: 1 }]
+//             });
+//         } else {
+//             // SI EXISTE EL CARRITO , VERIFICAR SI EL PRODUCTO YA ESTA EN EL CARRITO
+//             const existingProduct = userCart.products.find(p => p.productId === productId);
 
-            if (existingProduct) {
-                // SI EL PRODUCTO YA EXISTE , INCREMENTAR LA CANTIDAD
-                existingProduct.quantity += 1;
-            } else {
-                // SI EL PROD NO ESTA EN EL CARRITO, SE LO AGREGA
-                userCart.products.push({ productId, quantity: 1 });
-            }
-        }
+//             if (existingProduct) {
+//                 // SI EL PRODUCTO YA EXISTE , INCREMENTAR LA CANTIDAD
+//                 existingProduct.quantity += 1;
+//             } else {
+//                 // SI EL PROD NO ESTA EN EL CARRITO, SE LO AGREGA
+//                 userCart.products.push({ productId, quantity: 1 });
+//             }
+//         }
 
-        // GUARDAR CARRITO ACTUALIZADO EN BD
-        const updatedCart = await userCart.save();
-        res.status(200).json(updatedCart);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
-    }
-};
+//         // GUARDAR CARRITO ACTUALIZADO EN BD
+//         const updatedCart = await userCart.save();
+//         res.status(200).json(updatedCart);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json(err);
+//     }
+// };
 
 
 
