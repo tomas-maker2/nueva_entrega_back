@@ -15,7 +15,7 @@ import swaggerUiExpress from 'swagger-ui-express'
 import __direname from './utils/index.js';
 
 const app = express();
-const PORT = process.env.PORT || 5001
+
 
 dotenv.config()
 
